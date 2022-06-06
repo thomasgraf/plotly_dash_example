@@ -5,17 +5,25 @@ from dash import Dash, html, dcc
 import plotly.express as px
 import pandas as pd
 
+import sqlite3
+
+con = sqlite3.connect('sample.sqlite')
+
+df = pd.read_sql("Select * from temperatures;", con)
+df['dt'] = pd.to_datetime(df['dt'], unit="s", origin='unix')
+
+
 app = Dash(__name__)
 
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options
-df = pd.DataFrame({
-    "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
-    "Amount": [4, 1, 2, 2, 4, 5],
-    "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
-})
+#df = pd.DataFrame({
+#    "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
+#    "Amount": [4, 1, 2, 2, 4, 5],
+#    "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
+#})
 
-fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
+fig = px.line(df, x="dt", y="temp")
 
 app.layout = html.Div(children=[
     html.H1(children='Hello Dash'),
