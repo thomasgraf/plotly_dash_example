@@ -16,6 +16,7 @@ balances_df = pd.read_sql("Select * from balances;", con)
 balances_df['dt'] = pd.to_datetime(balances_df['dt'], unit="s", origin='unix')
 
 app = Dash(__name__)
+server = app.server
 
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options

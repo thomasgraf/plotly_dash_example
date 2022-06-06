@@ -1,3 +1,4 @@
 dash
 jupyter-dash
 pandas
+uwsgi
