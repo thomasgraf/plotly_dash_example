@@ -12,6 +12,8 @@ con = sqlite3.connect('sample.sqlite')
 df = pd.read_sql("Select * from temperatures;", con)
 df['dt'] = pd.to_datetime(df['dt'], unit="s", origin='unix')
 
+balances_df = pd.read_sql("Select * from balances;", con)
+balances_df['dt'] = pd.to_datetime(balances_df['dt'], unit="s", origin='unix')
 
 app = Dash(__name__)
 
@@ -24,6 +26,7 @@ app = Dash(__name__)
 #})
 
 fig = px.line(df, x="dt", y="temp")
+balances = px.line(balances_df, x="dt", y="balance", color='account_id', symbol="account_id", markers=True)
 
 app.layout = html.Div(children=[
     html.H1(children='Hello Dash'),
@@ -35,6 +38,14 @@ app.layout = html.Div(children=[
     dcc.Graph(
         id='example-graph',
         figure=fig
+    ),
+html.Div(children='''
+        Display account balances
+    '''),
+
+    dcc.Graph(
+        id='balances',
+        figure=balances
     )
 ])
 
